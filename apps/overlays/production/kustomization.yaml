@@ -1,0 +1,5 @@
+# apps/overlays/production/kustomization.yaml
+resources:
+- app-of-apps.yaml
+- guestbook/application.yaml
+- nginx/application.yaml
