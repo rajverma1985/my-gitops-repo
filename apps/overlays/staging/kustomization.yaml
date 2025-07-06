@@ -1,0 +1,4 @@
+resources:
+- app-of-apps.yaml
+- guestbook-app.yaml
+- nginx-app.yaml

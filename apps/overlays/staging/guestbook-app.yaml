@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: guestbook-production
+  name: guestbook-staging
   namespace: argocd
 spec:
   project: default
@@ -11,18 +11,14 @@ spec:
     path: charts/guestbook
     helm:
       values: |
-        replicaCount: 3
+        replicaCount: 2
         service:
-          type: LoadBalancer
+          type: NodePort
           port: 80
-        resources:
-          limits:
-            cpu: 500m
-            memory: 512Mi
   destination:
     server: https://kubernetes.default.svc
-    namespace: production
+    namespace: staging
   syncPolicy:
     automated:
       prune: true
-      selfHeal: false  # Manual sync for production
+      selfHeal: true
