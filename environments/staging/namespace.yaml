@@ -4,3 +4,6 @@ metadata:
   name: staging
   labels:
     istio-injection: enabled  # Example additional config
+  name: monitoring
+  labels:
+    istio-injection: enabled

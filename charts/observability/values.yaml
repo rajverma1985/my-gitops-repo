@@ -1,0 +1,15 @@
+# Monitoring stack using kube-prometheus-stack
+prometheus:
+  enabled: true
+  prometheusSpec:
+    storageSize: 10Gi
+    retention: 7d
+
+grafana:
+  enabled: true
+  adminPassword: "admin"  # Change in production!
+  service:
+    type: NodePort
+
+alertmanager:
+  enabled: false  # Enable if needed

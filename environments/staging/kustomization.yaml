@@ -1,4 +1,4 @@
 resources:
 - namespace.yaml  # Namespace created first
 - nginx-app.yaml       # Then applications
-- guestbook-app.yaml
+- observability-app.yaml   # New observability stack
