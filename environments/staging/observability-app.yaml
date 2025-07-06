@@ -15,8 +15,16 @@ spec:
       values: |
         prometheus:
           enabled: true
+          prometheusSpec:
+            storageSize: 10Gi
+            retention: 7d
         grafana:
           enabled: true
+          adminPassword: "admin"  # Change in production!
+          service:
+            type: ClusterIP
+        alertmanager:
+          enabled: false
   destination:
     server: https://kubernetes.default.svc
-    namespace: monitoring
+    namespace: monitoring  # Deploys to dedicated monitoring namespace

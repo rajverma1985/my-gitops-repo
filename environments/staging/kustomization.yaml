@@ -1,4 +1,4 @@
 resources:
-- namespace.yaml  # Namespace created first
-- nginx-app.yaml       # Then applications
-- observability-app.yaml   # New observability stack
+- namespace.yaml          # Contains both staging and monitoring namespaces
+- nginx-app.yaml          # Your existing app
+- observability-app.yaml  # New observability stack
