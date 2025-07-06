@@ -4,6 +4,12 @@ metadata:
   name: staging
   labels:
     istio-injection: enabled  # Example additional config
+
+---
+apiVersion: v1
+kind: Namespace
+metadata:
   name: monitoring
   labels:
     istio-injection: enabled
+    observability: enabled
