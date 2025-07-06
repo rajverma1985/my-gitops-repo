@@ -1,0 +1,82 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: argocd
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: argocd
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/argoproj/argo-helm
+    targetRevision: main
+    chart: argo-cd
+    helm:
+      values: |
+        server:
+          service:
+            type: NodePort
+          ingress:
+            enabled: true
+          config:
+            # Enable GitOps automation
+            timeout.reconciliation: 180s
+            accounts.admin: apiKey,login
+        configs:
+          # Configure repository credentials (replace with your details)
+          secret:
+            argocdServerAdminPassword: "$2a$10$5vg8h3we5c4o4WKlB0n9O.7sZ5q6J9z8b0JZ8K3a3d3v3b3v3b3v3b" # bcrypt hash of "admin"
+            argocdServerAdminPasswordMtime: "2023-01-01T00:00:00Z"
+        # Disable TLS for Minikube testing
+        tls:
+          enabled: false
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argocd
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: argocd-applicationset-controller
+  namespace: argocd
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: argocd-application-controller
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: argocd-application-controller
+subjects:
+- kind: ServiceAccount
+  name: argocd-application-controller
+  namespace: argocd
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: argocd-root-app
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/your-username/gitops-repo.git
+    targetRevision: HEAD
+    path: apps/root-app-of-apps.yaml
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argocd
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true

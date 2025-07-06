@@ -2,19 +2,19 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: root-app-of-apps
-  namespace: argocd
+  namespace: argocd  # Deployed in argocd namespace
 spec:
   project: default
   source:
     repoURL: https://github.com/rajverma1985/my-gitops-repo.git
     targetRevision: HEAD
-    path: environments/staging    # Points to staging configs
+    path: environments/staging  # Points to your configs
   destination:
     server: https://kubernetes.default.svc
-    namespace: argocd
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
     syncOptions:
-      - CreateNamespace=true
+    - CreateNamespace=true  # Ensures target namespaces are created
+    - ServerSideApply=true  # Better for complex resources
