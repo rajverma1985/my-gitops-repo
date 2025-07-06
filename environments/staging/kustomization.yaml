@@ -1,3 +1,4 @@
 resources:
 - namespace.yaml  # Namespace created first
-- apps.yaml       # Then applications
+- nginx-app.yaml       # Then applications
+- guestbook.yaml

@@ -19,26 +19,3 @@ spec:
   destination:
     server: https://kubernetes.default.svc
     namespace: production
-
----
-apiVersion: argoproj.io/v1alpha1
-kind: Application
-metadata:
-  name: nginx-production
-  annotations:
-    argocd.argoproj.io/sync-wave: "1"  # Waits for namespace
-  namespace: argocd
-spec:
-  project: default
-  source:
-    repoURL: https://github.com/rajverma1985/my-gitops-repo.git
-    targetRevision: HEAD
-    path: charts/nginx
-    helm:
-      values: |
-        replicaCount: 3
-        service:
-          type: LoadBalancer
-  destination:
-    server: https://kubernetes.default.svc
-    namespace: production
