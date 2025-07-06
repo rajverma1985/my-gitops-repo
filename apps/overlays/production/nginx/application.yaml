@@ -6,7 +6,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/your-username/my-gitops-repo.git
+    repoURL: https://github.com/rajverma1985/my-gitops-repo.git
     targetRevision: HEAD
     path: charts/nginx
   destination:
