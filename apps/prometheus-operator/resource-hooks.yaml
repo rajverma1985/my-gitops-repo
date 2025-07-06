@@ -1,0 +1,10 @@
+# apps/prometheus-operator/resource-hooks.yaml
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: crd-hooks
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+    argocd.argoproj.io/hook-delete-policy: HookSucceeded
+spec:
+  # Empty spec, just for the hook

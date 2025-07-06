@@ -2,13 +2,20 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: root-app-of-apps
-  namespace: argocd  # Deployed in argocd namespace
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "0"
 spec:
   project: default
-  source:
-    repoURL: https://github.com/rajverma1985/my-gitops-repo.git
+  sources:
+  - repoURL: https://github.com/rajverma1985/my-gitops-repo.git
     targetRevision: HEAD
-    path: environments/staging  # Points to your configs
+    path: apps/prometheus-operator
+    # CRDs will sync first due to wave annotation in their kustomization.yaml
+  - repoURL: https://github.com/rajverma1985/my-gitops-repo.git
+    targetRevision: HEAD
+    path: environments/staging
+    # Regular apps will sync after CRDs
   destination:
     server: https://kubernetes.default.svc
   syncPolicy:
@@ -16,5 +23,5 @@ spec:
       prune: true
       selfHeal: true
     syncOptions:
-    - CreateNamespace=true  # Ensures target namespaces are created
-    - ServerSideApply=true  # Better for complex resources
+    - CreateNamespace=true
+    - ServerSideApply=true

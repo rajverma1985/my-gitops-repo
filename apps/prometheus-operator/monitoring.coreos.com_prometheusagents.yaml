@@ -1,0 +1,26 @@
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: prometheusagents.monitoring.coreos.com
+spec:
+  group: monitoring.coreos.com
+  names:
+    kind: PrometheusAgent
+    listKind: PrometheusAgentList
+    plural: prometheusagents
+    singular: prometheusagent
+  scope: Namespaced
+  versions:
+  - name: v1
+    schema:
+      openAPIV3Schema:
+        type: object
+        properties:
+          spec:
+            type: object
+            properties:
+              # Add your PrometheusAgent spec properties here
+    served: true
+    storage: true
+    subresources:
+      status: {}

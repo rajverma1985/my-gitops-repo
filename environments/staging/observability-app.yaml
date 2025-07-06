@@ -1,30 +1,27 @@
+# environments/staging/observability-app.yaml
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: observability-staging
   namespace: argocd
   annotations:
-    argocd.argoproj.io/sync-wave: "0"  # Deploy first
+    argocd.argoproj.io/sync-wave: "10"  # Deploys after CRDs
+    argocd.argoproj.io/hook: Sync       # Ensures proper ordering
 spec:
   project: default
   source:
     repoURL: https://prometheus-community.github.io/helm-charts
     chart: kube-prometheus-stack
-    targetRevision: 58.2.0
+    targetRevision: 57.0.0
     helm:
       values: |
-        prometheus:
-          enabled: true
-          prometheusSpec:
-            storageSize: 10Gi
-            retention: 7d
-        grafana:
-          enabled: true
-          adminPassword: "admin"  # Change in production!
-          service:
-            type: ClusterIP
-        alertmanager:
-          enabled: false
+        crds:
+          enabled: false  # Since we manage CRDs separately
+        # Your other values from charts/observability/values.yaml
   destination:
     server: https://kubernetes.default.svc
-    namespace: monitoring  # Deploys to dedicated monitoring namespace
+    namespace: monitoring
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true

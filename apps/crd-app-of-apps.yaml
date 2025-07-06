@@ -1,0 +1,21 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: crd-app
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "-10"  # Earliest sync wave
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/rajverma1985/my-gitops-repo.git
+    path: apps/prometheus-operator
+    targetRevision: HEAD
+  destination:
+    server: https://kubernetes.default.svc
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - Validate=false  # CRDs often fail validation initially
