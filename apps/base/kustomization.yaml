@@ -1,4 +1,0 @@
-# Common base for all environments
-resources:
-- ../overlays/staging
-- ../overlays/production
